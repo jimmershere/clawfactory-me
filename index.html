@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClawFactory — AI Agent Engineering &amp; Consulting</title>
+  <meta name="description" content="ClawFactory is an OpenClaw-native AI consulting and agent engineering practice. Custom agent builds, enterprise deployments, systems rescue, and content growth engines." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0c10;
+      --surface: #111318;
+      --surface2: #181c23;
+      --border: #1e2330;
+      --accent: #00ffcc;
+      --accent2: #9b59b6;
+      --accent3: #f5a623;
+      --text: #e8eaf0;
+      --muted: #6b7280;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --max: 1200px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── NAV ─────────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 12, 16, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .nav-logo {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--accent);
+      white-space: nowrap;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--text); }
+
+    .nav-cta {
+      background: var(--accent);
+      color: #0a0c10 !important;
+      font-weight: 700 !important;
+      font-size: 0.85rem !important;
+      padding: 9px 20px;
+      border-radius: 8px;
+      transition: opacity 0.2s, transform 0.2s !important;
+      white-space: nowrap;
+    }
+
+    .nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .nav-mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text);
+      font-size: 1.4rem;
+      line-height: 1;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 64px;
+        left: 0; right: 0;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        padding: 16px 24px 20px;
+        gap: 16px;
+        align-items: flex-start;
+      }
+      .nav-mobile-toggle { display: block; }
+    }
+
+    /* ─── HERO ────────────────────────────────────────── */
+    .hero {
+      min-height: 88vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 20% 50%, rgba(0,255,204,0.04) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(155,89,182,0.06) 0%, transparent 45%),
+        radial-gradient(ellipse at center, rgba(0,0,0,0) 0%, rgba(10,12,16,0.6) 100%),
+        var(--bg);
+    }
+
+    /* dot-grid pattern overlay */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    .hero-content {
+      max-width: 740px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 255, 204, 0.08);
+      border: 1px solid rgba(0, 255, 204, 0.25);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+    }
+
+    .badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 span { color: var(--accent); }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 40px;
+      max-width: 600px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent);
+      color: #0a0c10;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 14px 28px;
+      border-radius: var(--radius-sm);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 14px 28px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      background: rgba(0,255,204,0.04);
+      transform: translateY(-2px);
+    }
+
+    /* ─── SECTION COMMON ──────────────────────────────── */
+    section {
+      padding: 96px 24px;
+    }
+
+    .section-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.7;
+    }
+
+    .section-head {
+      margin-bottom: 56px;
+    }
+
+    /* ─── SERVICES ────────────────────────────────────── */
+    #services {
+      background: var(--surface);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 640px) {
+      .services-grid { grid-template-columns: 1fr; }
+    }
+
+    .service-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+
+    .service-card:hover {
+      border-color: rgba(0,255,204,0.3);
+      transform: translateY(-3px);
+    }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .service-card h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    .service-card p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ─── WHY ─────────────────────────────────────────── */
+    #about {
+      background: var(--bg);
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    @media (max-width: 768px) {
+      .why-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+
+    .why-card {
+      padding: 36px 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: border-color 0.25s;
+    }
+
+    .why-card:hover { border-color: rgba(0,255,204,0.25); }
+
+    .why-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .why-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .why-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ─── STACK ───────────────────────────────────────── */
+    #stack {
+      background: var(--surface);
+    }
+
+    .stack-flow {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 48px;
+    }
+
+    .stack-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stack-pill {
+      background: var(--surface2);
+      border: 1.5px solid var(--accent);
+      border-radius: 100px;
+      padding: 10px 22px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent);
+      white-space: nowrap;
+      letter-spacing: 0.01em;
+      transition: background 0.2s;
+    }
+
+    .stack-pill:hover {
+      background: rgba(0,255,204,0.08);
+    }
+
+    .stack-sub {
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-align: center;
+      max-width: 100px;
+    }
+
+    .stack-arrow {
+      color: var(--muted);
+      font-size: 1.2rem;
+      padding: 0 8px;
+      align-self: center;
+      margin-bottom: 22px;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 700px) {
+      .stack-flow { flex-direction: column; gap: 4px; }
+      .stack-arrow { transform: rotate(90deg); margin: 0; padding: 4px 0; }
+    }
+
+    /* ─── ECOSYSTEM ───────────────────────────────────── */
+    #partners {
+      background: var(--bg);
+    }
+
+    .ecosystem-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 48px 40px;
+      max-width: 760px;
+    }
+
+    @media (max-width: 640px) {
+      .ecosystem-box { padding: 32px 24px; }
+    }
+
+    .ecosystem-box p {
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 28px;
+    }
+
+    .link-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,255,204,0.08);
+      border: 1px solid rgba(0,255,204,0.3);
+      color: var(--accent);
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .link-badge:hover {
+      background: rgba(0,255,204,0.14);
+      transform: translateY(-1px);
+    }
+
+    /* ─── CONTACT ─────────────────────────────────────── */
+    #contact {
+      background: var(--surface2);
+      text-align: center;
+      padding: 120px 24px;
+    }
+
+    .contact-inner {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    #contact .section-title { margin-bottom: 16px; }
+
+    .contact-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+
+    .contact-email {
+      font-size: 1rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 36px;
+      display: block;
+    }
+
+    .contact-email:hover { text-decoration: underline; }
+
+    .btn-contact {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: #0a0c10;
+      font-weight: 800;
+      font-size: 1.05rem;
+      padding: 16px 36px;
+      border-radius: var(--radius-sm);
+      transition: opacity 0.2s, transform 0.2s;
+      letter-spacing: -0.01em;
+    }
+
+    .btn-contact:hover { opacity: 0.88; transform: translateY(-2px); }
+
+    /* ─── FOOTER ──────────────────────────────────────── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 64px 24px 32px;
+    }
+
+    .footer-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    @media (max-width: 640px) {
+      .footer-top { grid-template-columns: 1fr; gap: 32px; }
+    }
+
+    .footer-brand .logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .footer-brand p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      max-width: 280px;
+      line-height: 1.6;
+    }
+
+    .footer-col h4 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-col a {
+      font-size: 0.9rem;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .footer-col a:hover { color: var(--text); }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .footer-bottom p {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .footer-bottom a {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .footer-bottom a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">🏭 ClawFactory</a>
+      <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Toggle menu">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#stack">Case Studies</a></li>
+        <li><a href="#partners">Partners</a></li>
+        <li><a href="#contact" class="nav-cta">Work With Us →</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="badge">AI Agent Engineering &amp; Consulting</div>
+        <h1>We Build AI Systems<br><span>That Actually Work.</span></h1>
+        <p class="hero-sub">OpenClaw-native consulting, custom agent architectures, and enterprise deployments. From broken system rescue to production at scale.</p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn-primary">Start a Conversation →</a>
+          <a href="#services" class="btn-secondary">See Our Work →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-inner">
+      <div class="section-head">
+        <div class="section-label">Services</div>
+        <h2 class="section-title">What We Do</h2>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <span class="service-icon">🛠️</span>
+          <h3>Agent Engineering</h3>
+          <p>Custom OpenClaw agents built end-to-end for your workflow. Memory, channels, cron, tools — all wired together and shipped.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">🔍</span>
+          <h3>Systems Rescue</h3>
+          <p>Broken pipelines, failed automations, production fires. We diagnose fast and fix faster. Root cause, not band-aids.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">🏗️</span>
+          <h3>Enterprise Deployment</h3>
+          <p>OpenClaw at scale with security, monitoring, and SLAs. Self-hosted, containerized, or cloud-managed.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">📈</span>
+          <h3>Content &amp; Growth</h3>
+          <p>AI-powered content engines and social growth systems. We run our own — we'll build yours.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY CLAWFACTORY -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="section-head">
+        <div class="section-label">Why Us</div>
+        <h2 class="section-title">Why ClawFactory</h2>
+      </div>
+      <div class="why-grid">
+        <div class="why-card">
+          <span class="why-icon">⚡</span>
+          <h3>OpenClaw-Native</h3>
+          <p>We don't just know the platform — we build on it daily. Our own agent (Giles) runs our operations.</p>
+        </div>
+        <div class="why-card">
+          <span class="why-icon">🌏</span>
+          <h3>Enterprise-Validated</h3>
+          <p>The same stack Baidu and Alibaba both bet on in China. We were already running it.</p>
+        </div>
+        <div class="why-card">
+          <span class="why-icon">🎯</span>
+          <h3>Builders First</h3>
+          <p>No fluff. No slideware. We ship lean, sharp, high-yield systems that actually run in production.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STACK VISUAL -->
+  <section id="stack">
+    <div class="section-inner">
+      <div class="section-head">
+        <div class="section-label">Architecture</div>
+        <h2 class="section-title">The ClawFactory Stack</h2>
+        <p class="section-sub">Every engagement is built on a proven, modular foundation — wired together and shipped fast.</p>
+      </div>
+      <div class="stack-flow">
+        <div class="stack-node">
+          <div class="stack-pill">OpenClaw Core</div>
+          <div class="stack-sub">Orchestration engine</div>
+        </div>
+        <div class="stack-arrow">→</div>
+        <div class="stack-node">
+          <div class="stack-pill">Claude / DeepSeek / GPT</div>
+          <div class="stack-sub">Model layer</div>
+        </div>
+        <div class="stack-arrow">→</div>
+        <div class="stack-node">
+          <div class="stack-pill">Skills Layer</div>
+          <div class="stack-sub">Custom tools &amp; APIs</div>
+        </div>
+        <div class="stack-arrow">→</div>
+        <div class="stack-node">
+          <div class="stack-pill">Channels</div>
+          <div class="stack-sub">Telegram · Discord · WhatsApp · Slack</div>
+        </div>
+        <div class="stack-arrow">→</div>
+        <div class="stack-node">
+          <div class="stack-pill">Boardroom Dashboard</div>
+          <div class="stack-sub">Mission control</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ECOSYSTEM -->
+  <section id="partners">
+    <div class="section-inner">
+      <div class="section-head">
+        <div class="section-label">Ecosystem</div>
+        <h2 class="section-title">Part of the Ecosystem</h2>
+      </div>
+      <div class="ecosystem-box">
+        <p>ClawFactory is an independent OpenClaw partner. Our community hub lives at clawfactory.net — the gathering place for skills, agents, news, and the #ProtectTheClaw movement.</p>
+        <a href="https://clawfactory.net" target="_blank" rel="noopener" class="link-badge">Visit ClawFactory.net →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-inner">
+      <h2 class="section-title">Ready to build something real?</h2>
+      <p class="contact-sub">Tell us what's broken or what you want to build. We'll tell you if we can help.</p>
+      <a href="mailto:hello@clawfactory.me" class="contact-email">hello@clawfactory.me</a>
+      <a href="mailto:hello@clawfactory.me" class="btn-contact">Get in Touch →</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <span class="logo">🏭 ClawFactory</span>
+          <p>AI agent engineering, built on OpenClaw.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="#services">Agent Engineering</a></li>
+            <li><a href="#services">Systems Rescue</a></li>
+            <li><a href="#services">Enterprise Deployment</a></li>
+            <li><a href="#services">Content &amp; Growth</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Ecosystem</h4>
+          <ul>
+            <li><a href="https://clawfactory.net" target="_blank" rel="noopener">clawfactory.net</a></li>
+            <li><a href="https://openclaw.ai" target="_blank" rel="noopener">openclaw.ai</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 ClawFactory. Built with OpenClaw. | <a href="https://clawfactory.net" target="_blank" rel="noopener">clawfactory.net</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const toggle = document.getElementById('mobileToggle');
+    const navLinks = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+      toggle.textContent = navLinks.classList.contains('open') ? '✕' : '☰';
+    });
+
+    // Close mobile nav on link click
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        toggle.textContent = '☰';
+      });
+    });
+
+    // Active nav link on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const links = document.querySelectorAll('.nav-links a[href^="#"]');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          links.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
+
+</body>
+</html>
